@@ -15,13 +15,15 @@ const userSchema = mongoose.Schema(
     password: {
       type: String,
       required: true,
+      minlength: 6,
     },
-    avatar: {
+    image: {
       type: String,
+      required: true,
     },
-    date: {
-      type: Date,
-      default: Date.now,
+    places: {
+      type: String,
+      required: true,
     },
   },
   { timestamps: true }
