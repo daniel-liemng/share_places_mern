@@ -1,9 +1,29 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useReducer } from "react";
+import axios from "axios";
+
+import reducer from "../reducer/AuthReducer";
 
 const AuthContext = createContext();
 
+const initialState = {
+  isAuthenticated: false,
+};
+
 const AuthProvider = ({ children }) => {
-  return <AuthContext.Provider>{children}</AuthContext.Provider>;
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const login = () => {
+    console.log("login");
+  };
+  const logout = () => {
+    console.log("logout");
+  };
+
+  return (
+    <AuthContext.Provider value={{ ...state, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 const useAuthContext = () => {

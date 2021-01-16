@@ -3,8 +3,11 @@ import { Nav, Navbar, Image } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
 import Logo from "../../assets/star_logo.svg";
+import { useAuthContext } from "../../context/AuthContext";
 
 const Header = () => {
+  const { isAuthenticated } = useAuthContext();
+
   return (
     <Navbar bg='primary' expand='md'>
       <LinkContainer to='/'>
@@ -25,15 +28,23 @@ const Header = () => {
           <LinkContainer to='/'>
             <Nav.Link>Users</Nav.Link>
           </LinkContainer>
-          <LinkContainer to='/u1/places'>
-            <Nav.Link>My Places</Nav.Link>
-          </LinkContainer>
-          <LinkContainer to='/places/new'>
-            <Nav.Link>Add Place</Nav.Link>
-          </LinkContainer>
-          <LinkContainer to='/login'>
-            <Nav.Link>Sign In</Nav.Link>
-          </LinkContainer>
+          {isAuthenticated && (
+            <LinkContainer to='/u1/places'>
+              <Nav.Link>My Places</Nav.Link>
+            </LinkContainer>
+          )}
+
+          {isAuthenticated && (
+            <LinkContainer to='/places/new'>
+              <Nav.Link>Add Place</Nav.Link>
+            </LinkContainer>
+          )}
+
+          {!isAuthenticated && (
+            <LinkContainer to='/login'>
+              <Nav.Link>Sign In</Nav.Link>
+            </LinkContainer>
+          )}
         </Nav>
       </Navbar.Collapse>
     </Navbar>
