@@ -6,7 +6,7 @@ import Logo from "../../assets/star_logo.svg";
 import { useAuthContext } from "../../context/AuthContext";
 
 const Header = () => {
-  const { isAuthenticated } = useAuthContext();
+  const { isAuthenticated, logout } = useAuthContext();
 
   return (
     <Navbar bg='primary' expand='md'>
@@ -45,6 +45,8 @@ const Header = () => {
               <Nav.Link>Sign In</Nav.Link>
             </LinkContainer>
           )}
+
+          {isAuthenticated && <Nav.Link onClick={logout}>Log Out</Nav.Link>}
         </Nav>
       </Navbar.Collapse>
     </Navbar>

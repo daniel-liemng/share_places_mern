@@ -6,7 +6,7 @@ import reducer from "../reducer/AuthReducer";
 const AuthContext = createContext();
 
 const initialState = {
-  isAuthenticated: false,
+  isAuthenticated: true,
 };
 
 const AuthProvider = ({ children }) => {

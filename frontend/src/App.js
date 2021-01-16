@@ -14,15 +14,17 @@ import UpdatePlace from "./pages/UpdatePlace";
 import UserPlaces from "./pages/UserPlaces";
 import Login from "./pages/Login";
 
+import AuthRoute from "./utils/AuthRoute";
+
 const App = () => {
   return (
     <Router>
       <Navbar />
       <Switch>
         <Route exact path='/' component={Users} />
-        <Route exact path='/:userId/places' component={UserPlaces} />
-        <Route exact path='/places/new' component={NewPlace} />
-        <Route exact path='/places/:placeId' component={UpdatePlace} />
+        <AuthRoute exact path='/:userId/places' component={UserPlaces} />
+        <AuthRoute exact path='/places/new' component={NewPlace} />
+        <AuthRoute exact path='/places/:placeId' component={UpdatePlace} />
         <Route exact path='/login' component={Login} />
         <Redirect to='/' />
       </Switch>

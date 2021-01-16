@@ -3,8 +3,11 @@ import { Button, Card, ListGroup, ListGroupItem, Modal } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
 import ConfirmDeleteModal from "../shared/ConfirmDeleteModal";
+import { useAuthContext } from "../../context/AuthContext";
 
 const PlaceItem = ({ place }) => {
+  const { isAuthenticated } = useAuthContext();
+
   const { id, title, description, imgUrl, address, location } = place;
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -18,20 +21,21 @@ const PlaceItem = ({ place }) => {
       <Card.Body>
         <Card.Title>{title}</Card.Title>
         <Card.Text>{description}</Card.Text>
-      </Card.Body>
-      <ListGroup className='list-group-flush'>
-        <ListGroupItem>
+        <Card.Text>
           <strong>Address:</strong> {address}
-        </ListGroupItem>
-      </ListGroup>
-      <Card.Body className='d-flex justify-content-around'>
-        <LinkContainer to={`/places/${id}`}>
-          <Button variant='warning'>Edit</Button>
-        </LinkContainer>
-        <Button variant='danger' onClick={handleDeleteModalShow}>
-          Delete
-        </Button>
+        </Card.Text>
       </Card.Body>
+      {isAuthenticated && (
+        <Card.Footer className='d-flex justify-content-around'>
+          <LinkContainer to={`/places/${id}`}>
+            <Button variant='warning'>Edit</Button>
+          </LinkContainer>
+          <Button variant='danger' onClick={handleDeleteModalShow}>
+            Delete
+          </Button>
+        </Card.Footer>
+      )}
+
       <Modal show={showDeleteModal} onHide={handleDeleteModalClose} centered>
         <ConfirmDeleteModal handleClose={handleDeleteModalClose} />
       </Modal>
