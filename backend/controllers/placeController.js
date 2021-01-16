@@ -5,10 +5,15 @@ const getCoordsForAddress = require("../utils/location");
 // @route   GET api/places/:placeId
 // @desc    Get place by placeId - singlePlace
 // @access  Public
-const getPlaceByPlaceId = (req, res) => {
+const getPlaceByPlaceId = async (req, res) => {
   const { placeId } = req.params;
 
-  const place = placeData.find((p) => p.id === placeId);
+  let place;
+  try {
+    place = await Place.findById(placeId);
+  } catch (err) {
+    throw new HttpError("Could not find a place", 500);
+  }
 
   // if (!place) {
   //   const error = new Error("Could not find a place with the placeId");
@@ -17,8 +22,11 @@ const getPlaceByPlaceId = (req, res) => {
   // }
 
   if (!place) {
-    throw new HttpError("Not found PLACEId", 404);
+    throw new HttpError("Not Found a Place with the provided id", 404);
   }
+
+  // Convert to normal JS object -> get rid of _id
+  // res.json({ place: place.toObject({ getters: true }) });
 
   res.json(place);
 };
