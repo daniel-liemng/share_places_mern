@@ -1,8 +1,8 @@
 const { body, validationResult } = require("express-validator");
 
-const userRegisterValidator = [
+const userSignupValidator = [
   body("name", "Name is required").not().isEmpty(),
-  body("email", "Please provide a valid email").isEmail(),
+  body("email", "Please provide a valid email").normalizeEmail().isEmail(),
   body("password", "Password is at least 6 characters long").isLength({
     min: 6,
   }),
@@ -27,4 +27,4 @@ const userLoginValidator = [
   },
 ];
 
-module.exports = { userRegisterValidator, userLoginValidator };
+module.exports = { userSignupValidator, userLoginValidator };

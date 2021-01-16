@@ -1,6 +1,9 @@
 const placeController = require("../controllers/placeController");
-
 const HttpError = require("../models/HttpErrorModel");
+const {
+  createPlaceValidator,
+  updatePlaceValidator,
+} = require("../validator/placeValidator");
 
 const router = require("express").Router();
 
@@ -17,12 +20,12 @@ router.get("/user/:userId", placeController.getPlacesByUserId);
 // @route   POST api/places
 // @desc    Create new place
 // @access  Public
-router.get("/", placeController.createPlace);
+router.get("/", createPlaceValidator, placeController.createPlace);
 
 // @route   PATCH api/places/:placeId
 // @desc    Update place
 // @access  Public
-router.patch("/:placeId", placeController.updatePlace);
+router.patch("/:placeId", updatePlaceValidator, placeController.updatePlace);
 
 // @route   DELETE api/places/:placeId
 // @desc    Delete place
