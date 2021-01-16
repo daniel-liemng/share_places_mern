@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 
@@ -8,7 +8,18 @@ import TextAreaInput from "../components/form/TextAreaInput";
 const NewPlace = () => {
   const { control, handleSubmit, errors } = useForm();
 
-  const onSubmit = (data) => console.log("submit", data);
+  const [submitting, setSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onSubmit = (data) => {
+    setSubmitting(true);
+    setIsLoading(true);
+
+    console.log("submit", data);
+
+    setSubmitting(false);
+    setIsLoading(false);
+  };
 
   console.log(errors);
 
@@ -50,7 +61,11 @@ const NewPlace = () => {
               )}
             </Form.Group>
 
-            <Button variant='primary' type='submit'>
+            <Button
+              variant='primary'
+              type='submit'
+              disabled={submitting || isLoading}
+            >
               Add Place
             </Button>
           </Form>

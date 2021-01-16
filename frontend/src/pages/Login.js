@@ -1,25 +1,54 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 
 import EmailInput from "../components/form/EmailInput";
 import PasswordInput from "../components/form/PasswordInput";
+import TextFieldInput from "../components/form/TextFieldInput";
 
 const Login = () => {
   const { control, handleSubmit, errors } = useForm();
+
+  // Switch between Login and Register
+  const [isLoginMode, setIsLoginMode] = useState(true);
+
+  const [submitting, setSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const switchModeHandle = () => {
+    setIsLoginMode((prevMode) => !prevMode);
+  };
 
   const onSubmit = (data) => {
     console.log("submit", data);
   };
 
+  console.log("error", errors);
+
   return (
     <div className='new-form'>
       <Card style={{ width: "30rem", marginTop: "4rem" }}>
         <Card.Title className='text-center' style={{ marginTop: "2rem" }}>
-          <h2>Login</h2>
+          <h2>{isLoginMode ? "Login" : "Register"}</h2>
         </Card.Title>
         <Card.Body>
           <Form onSubmit={handleSubmit(onSubmit)}>
+            {!isLoginMode && (
+              <Form.Group controlId='formBasicName'>
+                <Form.Label>Name</Form.Label>
+                <TextFieldInput
+                  name='name'
+                  control={control}
+                  className={errors.name ? "error" : null}
+                />
+                {errors.name && (
+                  <Form.Text className='text-danger'>
+                    {errors.name.message}
+                  </Form.Text>
+                )}
+              </Form.Group>
+            )}
+
             <Form.Group controlId='formBasicEmail'>
               <Form.Label>Email</Form.Label>
               <EmailInput
@@ -48,11 +77,25 @@ const Login = () => {
               )}
             </Form.Group>
 
-            <Button variant='primary' type='submit'>
-              Login
+            <Button
+              variant='primary'
+              type='submit'
+              disabled={submitting || isLoading}
+            >
+              {isLoginMode ? "Login" : "Register"}
             </Button>
           </Form>
         </Card.Body>
+        <Card.Footer>
+          {isLoginMode ? "Don't have an account" : "Already have an account"}
+          <Button
+            variant='secondary'
+            onClick={switchModeHandle}
+            style={{ marginLeft: "2rem" }}
+          >
+            {isLoginMode ? "Switch To Register" : "Switch To Login"}
+          </Button>
+        </Card.Footer>
       </Card>
     </div>
   );
