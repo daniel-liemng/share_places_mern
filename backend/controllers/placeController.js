@@ -28,16 +28,21 @@ const getPlaceByPlaceId = async (req, res) => {
   // Convert to normal JS object -> get rid of _id
   // res.json({ place: place.toObject({ getters: true }) });
 
-  res.json(place);
+  res.json({ place });
 };
 
 // @route   GET api/places/user/:userId
 // @desc    Get all places of a user by userId - creator
 // @access  Public
-const getPlacesByUserId = (req, res, next) => {
+const getPlacesByUserId = async (req, res, next) => {
   const { userId } = req.params;
 
-  const place = placeData.filter((p) => p.creator === userId);
+  let places;
+  try {
+    places = await Place.find({ creator: userId });
+  } catch (err) {
+    throw new HttpError("Fetching places failed, please try again later", 500);
+  }
 
   // if (!place) {
   //   const error = new Error("Could not find a place with the userId");
@@ -45,11 +50,15 @@ const getPlacesByUserId = (req, res, next) => {
   //   return next(error);
   // }
 
-  if (!place) {
+  if (!places || places.length === 0) {
     return next(new HttpError("Not found userId", 404));
   }
 
-  res.json(place);
+  // res.json({
+  //   places: places.map((place) => place.toObject({ getters: true })),
+  // });
+
+  res.json({ places });
 };
 
 // @route   POST api/places
@@ -96,21 +105,33 @@ const updatePlace = async (req, res) => {
   const { placeId } = req.params;
 
   //// UPDATE
-  // 1. Find the updatePlace
+  // 1. Find the updatePlace by ID
   // 2. Find its index
   // 3. Make change on certain fields
   // 4. Replace with the updatePlace
 
-  const updatedPlace = { ...placeData.find((p) => p.id === placeId) };
+  let place;
 
-  const placeIndex = placeData.findIndex((p) => p.id === placeId);
+  try {
+    place = await Place.findById(placeId);
+  } catch (err) {
+    throw new HttpError("Could not update place", 500);
+  }
 
-  updatedPlace.title = title;
-  updatedPlace.description = description;
+  if (!place) {
+    throw new HttpError("Not Found a Place with the provided id", 404);
+  }
 
-  placeData[placeIndex] = updatedPlace;
+  place.title = title;
+  place.description = description;
 
-  res.status(200).json({ place: updatedPlace });
+  try {
+    await place.save();
+  } catch (err) {
+    throw new HttpError("Could not update place", 500);
+  }
+
+  res.status(200).json({ place });
 };
 
 // @route   DELETE api/places/:placeId
@@ -118,6 +139,26 @@ const updatePlace = async (req, res) => {
 // @access  Public
 const deletePlace = async (req, res) => {
   const { placeId } = req.params;
+
+  let place;
+
+  try {
+    place = await Place.findById(placeId);
+  } catch (err) {
+    throw new HttpError("Could not delete place", 500);
+  }
+
+  if (!place) {
+    throw new HttpError("Not Found a Place with the provided id", 404);
+  }
+
+  try {
+    await place.remove();
+  } catch (err) {
+    throw new HttpError("Could not delete place", 500);
+  }
+
+  res.status(200).json({ message: "Deleted successfully" });
 };
 
 module.exports = {
