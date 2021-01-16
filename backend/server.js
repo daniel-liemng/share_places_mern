@@ -23,6 +23,10 @@ app.get("/", (req, res) => res.send("API"));
 app.use("/api/users", require("./routes/userRoute"));
 app.use("/api/places", require("./routes/placeRoute"));
 
+// Route Not Found middleware
+const routeNotFoundMiddleware = require("./middleware/routeNotFoundMiddleware");
+app.use(routeNotFoundMiddleware);
+
 // Error handler middleware - Anonymous error
 const errorHandlerMiddleware = require("./middleware/errorHandlerMiddleware");
 app.use(errorHandlerMiddleware);
