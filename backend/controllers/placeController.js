@@ -31,7 +31,7 @@ const placeData = [
 ];
 
 // @route   GET api/places/:placeId
-// @desc    Get a single place
+// @desc    Get place by placeId - singlePlace
 // @access  Public
 const getPlaceByPlaceId = (req, res) => {
   const { placeId } = req.params;
@@ -51,7 +51,7 @@ const getPlaceByPlaceId = (req, res) => {
   res.json(place);
 };
 
-// @route   POST api/users
+// @route   GET api/places/user/:userId
 // @desc    Get place by userId - creator
 // @access  Public
 const getPlaceByUserId = (req, res, next) => {
@@ -72,6 +72,9 @@ const getPlaceByUserId = (req, res, next) => {
   res.json(place);
 };
 
+// @route   POST api/places
+// @desc    Create new place
+// @access  Public
 const createPlace = async (req, res) => {
   const { title, description, coordinates, address, creator } = req.body;
 
@@ -86,4 +89,43 @@ const createPlace = async (req, res) => {
   res.status(201).json({ place: newPlace });
 };
 
-module.exports = { getPlaceByPlaceId, getPlaceByUserId, createPlace };
+// @route   PATCH api/places/:placeId
+// @desc    Update place
+// @access  Public
+//// PATCH - update some certain fields
+const updatePlace = async (req, res) => {
+  // Only allow update title & description
+  const { title, description } = req.body;
+
+  const { placeId } = req.params;
+
+  //// UPDATE
+  // 1. Find the updatePlace
+  // 2. Find its index
+  // 3. Make change on certain fields
+  // 4. Replace with the updatePlace
+
+  const updatedPlace = { ...placeData.find((p) => p.id === placeId) };
+
+  const placeIndex = placeData.findIndex((p) => p.id === placeId);
+
+  updatedPlace.title = title;
+  updatedPlace.description = description;
+
+  placeData[placeIndex] = updatedPlace;
+
+  res.status(200).json({ place: updatedPlace });
+};
+
+// @route   DELETE api/places/:placeId
+// @desc    Delete place
+// @access  Public
+const deletePlace = async (req, res) => {};
+
+module.exports = {
+  getPlaceByPlaceId,
+  getPlaceByUserId,
+  createPlace,
+  updatePlace,
+  deletePlace,
+};

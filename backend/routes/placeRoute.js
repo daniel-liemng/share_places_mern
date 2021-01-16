@@ -19,4 +19,14 @@ router.get("/user/:userId", placeController.getPlaceByUserId);
 // @access  Public
 router.get("/", placeController.createPlace);
 
+// @route   PATCH api/places/:placeId
+// @desc    Update place
+// @access  Public
+router.patch("/:placeId", placeController.updatePlace);
+
+// @route   DELETE api/places/:placeId
+// @desc    Delete place
+// @access  Public
+router.delete("/:placeId", placeController.deletePlace);
+
 module.exports = router;
