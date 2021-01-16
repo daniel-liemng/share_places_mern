@@ -52,12 +52,12 @@ const getPlaceByPlaceId = (req, res) => {
 };
 
 // @route   GET api/places/user/:userId
-// @desc    Get place by userId - creator
+// @desc    Get all places of a user by userId - creator
 // @access  Public
-const getPlaceByUserId = (req, res, next) => {
+const getPlacesByUserId = (req, res, next) => {
   const { userId } = req.params;
 
-  const place = placeData.find((p) => p.creator === userId);
+  const place = placeData.filter((p) => p.creator === userId);
 
   // if (!place) {
   //   const error = new Error("Could not find a place with the userId");
@@ -120,11 +120,13 @@ const updatePlace = async (req, res) => {
 // @route   DELETE api/places/:placeId
 // @desc    Delete place
 // @access  Public
-const deletePlace = async (req, res) => {};
+const deletePlace = async (req, res) => {
+  const { placeId } = req.params;
+};
 
 module.exports = {
   getPlaceByPlaceId,
-  getPlaceByUserId,
+  getPlacesByUserId,
   createPlace,
   updatePlace,
   deletePlace,

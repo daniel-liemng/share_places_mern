@@ -12,7 +12,7 @@ router.get("/:placeId", placeController.getPlaceByPlaceId);
 // @route   GET api/places/user/:userId
 // @desc    Get place by userId - creator
 // @access  Public
-router.get("/user/:userId", placeController.getPlaceByUserId);
+router.get("/user/:userId", placeController.getPlacesByUserId);
 
 // @route   POST api/places
 // @desc    Create new place
