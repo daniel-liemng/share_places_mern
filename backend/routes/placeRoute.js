@@ -5,7 +5,7 @@ const HttpError = require("../models/HttpErrorModel");
 const router = require("express").Router();
 
 // @route   GET api/places/:placeId
-// @desc    Get a single place
+// @desc    Get place by placeId - singlePlace
 // @access  Public
 router.get("/:placeId", placeController.getPlaceByPlaceId);
 
@@ -13,5 +13,10 @@ router.get("/:placeId", placeController.getPlaceByPlaceId);
 // @desc    Get place by userId - creator
 // @access  Public
 router.get("/user/:userId", placeController.getPlaceByUserId);
+
+// @route   POST api/places
+// @desc    Create new place
+// @access  Public
+router.get("/", placeController.createPlace);
 
 module.exports = router;

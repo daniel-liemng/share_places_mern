@@ -72,4 +72,18 @@ const getPlaceByUserId = (req, res, next) => {
   res.json(place);
 };
 
-module.exports = { getPlaceByPlaceId, getPlaceByUserId };
+const createPlace = async (req, res) => {
+  const { title, description, coordinates, address, creator } = req.body;
+
+  const newPlace = {
+    title,
+    description,
+    location: coordinates,
+    address,
+    creator,
+  };
+
+  res.status(201).json({ place: newPlace });
+};
+
+module.exports = { getPlaceByPlaceId, getPlaceByUserId, createPlace };
