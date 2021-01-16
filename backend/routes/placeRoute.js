@@ -20,7 +20,7 @@ router.get("/user/:userId", placeController.getPlacesByUserId);
 // @route   POST api/places
 // @desc    Create new place
 // @access  Public
-router.get("/", createPlaceValidator, placeController.createPlace);
+router.post("/", createPlaceValidator, placeController.createPlace);
 
 // @route   PATCH api/places/:placeId
 // @desc    Update place

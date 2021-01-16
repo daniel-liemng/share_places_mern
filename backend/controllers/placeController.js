@@ -1,5 +1,6 @@
 const HttpError = require("../models/HttpErrorModel");
 const Place = require("../models/Place");
+const getCoordsForAddress = require("../utils/location");
 
 const placeData = [
   {
@@ -76,15 +77,25 @@ const getPlacesByUserId = (req, res, next) => {
 // @desc    Create new place
 // @access  Public
 const createPlace = async (req, res) => {
-  const { title, description, coordinates, address, creator } = req.body;
+  const { title, description, address, creator } = req.body;
+
+  let coordinates;
+  try {
+    coordinates = await getCoordsForAddress(address);
+  } catch (err) {
+    next(err);
+  }
 
   const newPlace = {
+    id: Math.random() * 1000,
     title,
     description,
     location: coordinates,
     address,
     creator,
   };
+
+  placeData.unshift(newPlace);
 
   res.status(201).json({ place: newPlace });
 };
