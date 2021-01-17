@@ -44,7 +44,6 @@ const getPlacesByUserId = async (req, res, next) => {
   try {
     places = await Place.find({ creator: userId });
   } catch (err) {
-    // throw new HttpError("Fetching places failed, please try again later", 500);
     return next(
       new HttpError("Fetching places failed, please try again later", 500)
     );
@@ -115,7 +114,6 @@ const createPlace = async (req, res, next) => {
     await user.save({ session: sess });
     await sess.commitTransaction();
   } catch (err) {
-    // throw new HttpError("Creating place failed, please try again");
     return next(new HttpError("Creating place failed, please try again"));
   }
 
@@ -143,12 +141,10 @@ const updatePlace = async (req, res, next) => {
   try {
     place = await Place.findById(placeId);
   } catch (err) {
-    // throw new HttpError("Could not update place", 500);
     return next(new HttpError("Could not update place", 500));
   }
 
   if (!place) {
-    // throw new HttpError("Not Found a Place with the provided id", 404);
     return next(new HttpError("Not Found a Place with the provided id", 404));
   }
 
@@ -158,7 +154,6 @@ const updatePlace = async (req, res, next) => {
   try {
     await place.save();
   } catch (err) {
-    // throw new HttpError("Could not update place", 500);
     return next(new HttpError("Could not update place", 500));
   }
 

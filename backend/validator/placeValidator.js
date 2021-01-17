@@ -12,10 +12,8 @@ const createPlaceValidator = [
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
-
-      // Next to use Google Map API
-      // next(new HttpError("Invalid inputs passed, please check your data", 422));
     }
+    // next to use Google Map API
     next();
   },
 ];
