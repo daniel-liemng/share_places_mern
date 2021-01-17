@@ -1,16 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import * as Yup from "yup";
 
 import EmailInput from "../components/form/EmailInput";
 import PasswordInput from "../components/form/PasswordInput";
 import TextFieldInput from "../components/form/TextFieldInput";
+import useYupValidationResolver from "../utils/YupValidationResolver";
 
 const Login = () => {
-  const { control, handleSubmit, errors } = useForm();
-
   // Switch between Login and Register
   const [isLoginMode, setIsLoginMode] = useState(true);
+
+  // Yup validation
+  const validationSchema = useMemo(
+    () =>
+      Yup.object({
+        // name: Yup.string().required("Required"),
+        email: Yup.string().required("Required").email("Invalid email format"),
+        password: Yup.string().min(
+          6,
+          "Password is at leasts 6 characters long"
+        ),
+      }),
+    []
+  );
+
+  const resolver = useYupValidationResolver(validationSchema);
+
+  const { control, handleSubmit, errors } = useForm({ resolver });
 
   const [submitting, setSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +69,12 @@ const Login = () => {
 
             <Form.Group controlId='formBasicEmail'>
               <Form.Label>Email</Form.Label>
-              <EmailInput
+              {/* <EmailInput
+                name='email'
+                control={control}
+                className={errors.email ? "error" : null}
+              /> */}
+              <TextFieldInput
                 name='email'
                 control={control}
                 className={errors.email ? "error" : null}
@@ -65,9 +88,15 @@ const Login = () => {
 
             <Form.Group controlId='formBasicPassword'>
               <Form.Label>Password</Form.Label>
-              <PasswordInput
+              {/* <PasswordInput
                 name='password'
                 control={control}
+                className={errors.password ? "error" : null}
+              /> */}
+              <TextFieldInput
+                name='password'
+                control={control}
+                type='password'
                 className={errors.password ? "error" : null}
               />
               {errors.password && (

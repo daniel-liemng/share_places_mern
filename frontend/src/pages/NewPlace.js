@@ -1,12 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import * as Yup from "yup";
 
 import TextFieldInput from "../components/form/TextFieldInput";
 import TextAreaInput from "../components/form/TextAreaInput";
+import useYupValidationResolver from "../utils/YupValidationResolver";
 
 const NewPlace = () => {
-  const { control, handleSubmit, errors } = useForm();
+  const validationSchema = useMemo(
+    () =>
+      Yup.object({
+        title: Yup.string().required("Required !!!**"),
+        description: Yup.string().min(
+          5,
+          "Description is at least 5 characters long"
+        ),
+        address: Yup.string().required("Required !!!**"),
+      }),
+    []
+  );
+
+  const resolver = useYupValidationResolver(validationSchema);
+
+  const { control, handleSubmit, errors } = useForm({ resolver });
 
   const [submitting, setSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +50,11 @@ const NewPlace = () => {
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Form.Group controlId='formBasicTitle'>
               <Form.Label>Title</Form.Label>
-              <TextFieldInput name='title' control={control} />
+              <TextFieldInput
+                name='title'
+                control={control}
+                className={errors.title ? "error" : null}
+              />
               {errors.title && (
                 <Form.Text className='text-danger'>
                   {errors.title.message}
@@ -43,7 +64,11 @@ const NewPlace = () => {
 
             <Form.Group controlId='formBasicDescription'>
               <Form.Label>Description</Form.Label>
-              <TextAreaInput name='description' control={control} />
+              <TextAreaInput
+                name='description'
+                control={control}
+                className={errors.description ? "error" : null}
+              />
               {errors.description && (
                 <Form.Text className='text-danger'>
                   {errors.description.message}
@@ -53,7 +78,11 @@ const NewPlace = () => {
 
             <Form.Group controlId='formBasicAddress'>
               <Form.Label>Address</Form.Label>
-              <TextFieldInput name='address' control={control} />
+              <TextFieldInput
+                name='address'
+                control={control}
+                className={errors.address ? "error" : null}
+              />
               {errors.address && (
                 <Form.Text className='text-danger'>
                   {errors.address.message}
