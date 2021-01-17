@@ -1,5 +1,8 @@
 const userController = require("../controllers/userController");
-const { userSignupValidator } = require("../validator/userValidator");
+const {
+  userSignupValidator,
+  userLoginValidator,
+} = require("../validator/userValidator");
 
 const router = require("express").Router();
 
@@ -16,6 +19,6 @@ router.post("/signup", userSignupValidator, userController.signup);
 // @route   POST api/users/login
 // @desc    Login
 // @access  Public
-router.post("/login", userController.login);
+router.post("/login", userLoginValidator, userController.login);
 
 module.exports = router;

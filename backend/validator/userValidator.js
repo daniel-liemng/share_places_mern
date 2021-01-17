@@ -17,7 +17,9 @@ const userSignupValidator = [
 
 const userLoginValidator = [
   body("email", "Please provide a valid email").isEmail(),
-  body("password", "Password is required").not().isEmpty(),
+  body("password", "Password is at least 6 characters long").isLength({
+    min: 6,
+  }),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

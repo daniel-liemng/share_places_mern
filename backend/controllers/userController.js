@@ -52,10 +52,22 @@ const signup = async (req, res, next) => {
 // @route   POST api/users/login
 // @desc    Login
 // @access  Public
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   const { email, password } = req.body;
 
-  res.json();
+  let existingUser;
+
+  try {
+    existingUser = await User.findOne({ email });
+  } catch (err) {
+    return next(new HttpError("Login failed, try later", 500));
+  }
+
+  if (!existingUser || existingUser.password !== password) {
+    return next(new HttpError("Invalid credentials, could not log in", 401));
+  }
+
+  res.json({ message: "Logged In" });
 };
 
 module.exports = { getAllUsers, signup, login };

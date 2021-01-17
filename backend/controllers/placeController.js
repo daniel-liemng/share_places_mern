@@ -5,14 +5,14 @@ const getCoordsForAddress = require("../utils/location");
 // @route   GET api/places/:placeId
 // @desc    Get place by placeId - singlePlace
 // @access  Public
-const getPlaceByPlaceId = async (req, res) => {
+const getPlaceByPlaceId = async (req, res, next) => {
   const { placeId } = req.params;
 
   let place;
   try {
     place = await Place.findById(placeId);
   } catch (err) {
-    throw new HttpError("Could not find a place", 500);
+    return next(new HttpError("Could not find a place", 500));
   }
 
   // if (!place) {
@@ -22,7 +22,7 @@ const getPlaceByPlaceId = async (req, res) => {
   // }
 
   if (!place) {
-    throw new HttpError("Not Found a Place with the provided id", 404);
+    return next(new HttpError("Not Found a Place with the provided id", 404));
   }
 
   // Convert to normal JS object -> get rid of _id
@@ -41,7 +41,10 @@ const getPlacesByUserId = async (req, res, next) => {
   try {
     places = await Place.find({ creator: userId });
   } catch (err) {
-    throw new HttpError("Fetching places failed, please try again later", 500);
+    // throw new HttpError("Fetching places failed, please try again later", 500);
+    return next(
+      new HttpError("Fetching places failed, please try again later", 500)
+    );
   }
 
   // if (!place) {
@@ -64,7 +67,7 @@ const getPlacesByUserId = async (req, res, next) => {
 // @route   POST api/places
 // @desc    Create new place
 // @access  Public
-const createPlace = async (req, res) => {
+const createPlace = async (req, res, next) => {
   const { title, description, address, creator } = req.body;
 
   // Get coordinates from Google Geocoding API
@@ -88,7 +91,8 @@ const createPlace = async (req, res) => {
   try {
     await createdPlace.save();
   } catch (err) {
-    throw new HttpError("Creating place failed, please try again");
+    // throw new HttpError("Creating place failed, please try again");
+    return next(new HttpError("Creating place failed, please try again"));
   }
 
   res.status(201).json({ place: createdPlace });
@@ -98,7 +102,7 @@ const createPlace = async (req, res) => {
 // @desc    Update place
 // @access  Public
 //// PATCH - update some certain fields
-const updatePlace = async (req, res) => {
+const updatePlace = async (req, res, next) => {
   // Only allow update title & description
   const { title, description } = req.body;
 
@@ -115,11 +119,13 @@ const updatePlace = async (req, res) => {
   try {
     place = await Place.findById(placeId);
   } catch (err) {
-    throw new HttpError("Could not update place", 500);
+    // throw new HttpError("Could not update place", 500);
+    return next(new HttpError("Could not update place", 500));
   }
 
   if (!place) {
-    throw new HttpError("Not Found a Place with the provided id", 404);
+    // throw new HttpError("Not Found a Place with the provided id", 404);
+    return next(new HttpError("Not Found a Place with the provided id", 404));
   }
 
   place.title = title;
@@ -128,7 +134,8 @@ const updatePlace = async (req, res) => {
   try {
     await place.save();
   } catch (err) {
-    throw new HttpError("Could not update place", 500);
+    // throw new HttpError("Could not update place", 500);
+    return next(new HttpError("Could not update place", 500));
   }
 
   res.status(200).json({ place });
@@ -137,7 +144,7 @@ const updatePlace = async (req, res) => {
 // @route   DELETE api/places/:placeId
 // @desc    Delete place
 // @access  Public
-const deletePlace = async (req, res) => {
+const deletePlace = async (req, res, next) => {
   const { placeId } = req.params;
 
   let place;
@@ -145,17 +152,20 @@ const deletePlace = async (req, res) => {
   try {
     place = await Place.findById(placeId);
   } catch (err) {
-    throw new HttpError("Could not delete place", 500);
+    // throw new HttpError("Could not delete place", 500);
+    return next(new HttpError("Could not delete place", 500));
   }
 
   if (!place) {
-    throw new HttpError("Not Found a Place with the provided id", 404);
+    // throw new HttpError("Not Found a Place with the provided id", 404);
+    return next(new HttpError("Not Found a Place with the provided id", 404));
   }
 
   try {
     await place.remove();
   } catch (err) {
-    throw new HttpError("Could not delete place", 500);
+    // throw new HttpError("Could not delete place", 500);
+    return next(new HttpError("Could not delete place", 500));
   }
 
   res.status(200).json({ message: "Deleted successfully" });
