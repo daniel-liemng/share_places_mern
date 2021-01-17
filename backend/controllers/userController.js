@@ -20,7 +20,7 @@ const getAllUsers = async (req, res, next) => {
 // @desc    Sign up
 // @access  Public
 const signup = async (req, res, next) => {
-  const { name, email, password, places } = req.body;
+  const { name, email, password } = req.body;
 
   let existingUser;
 
@@ -44,7 +44,7 @@ const signup = async (req, res, next) => {
     image:
       "https://i2.wp.com/digital-photography-school.com/wp-content/uploads/2011/07/outdoor-portraits-1.jpg?resize=2000%2C1160&ssl=1",
     password,
-    places,
+    places: [],
   });
 
   try {

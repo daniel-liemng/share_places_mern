@@ -21,10 +21,13 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    places: {
-      type: String,
-      required: true,
-    },
+    places: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Place",
+        required: true,
+      },
+    ],
   },
   { timestamps: true }
 );

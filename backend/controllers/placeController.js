@@ -1,5 +1,8 @@
+const mongoose = require("mongoose");
+
 const HttpError = require("../models/HttpErrorModel");
 const Place = require("../models/Place");
+const User = require("../models/User");
 const getCoordsForAddress = require("../utils/location");
 
 // @route   GET api/places/:placeId
@@ -88,8 +91,29 @@ const createPlace = async (req, res, next) => {
     creator,
   });
 
+  // Check if userID exists in places -> not allow 2
+  let user;
   try {
-    await createdPlace.save();
+    user = await User.findById(creator);
+  } catch (err) {
+    return next(new HttpError("Creating place failed, try again", 500));
+  }
+  if (!user) {
+    return next(new HttpError("Cound not find user with the provided Id", 404));
+  }
+
+  //// ************* ////
+  // If user exist -> create new place to Place and add placeId to User
+  // Do 2 things -> TRANSACTION & SESSION
+  // Collection 'places' must exists in DB -> Empty is Ok, but must exist
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await createdPlace.save({ session: sess });
+    //// PUSH - mongoose method -> just add ObjectId of createdPlace to user.places
+    user.places.push(createdPlace);
+    await user.save({ session: sess });
+    await sess.commitTransaction();
   } catch (err) {
     // throw new HttpError("Creating place failed, please try again");
     return next(new HttpError("Creating place failed, please try again"));
