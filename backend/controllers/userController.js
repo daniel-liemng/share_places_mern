@@ -4,8 +4,16 @@ const User = require("../models/User");
 // @route   GET api/users
 // @desc    Get all users
 // @access  Public
-const getAllUsers = async (req, res) => {
-  res.json();
+const getAllUsers = async (req, res, next) => {
+  let users;
+
+  try {
+    users = await User.find({}, "-password");
+  } catch (err) {
+    return next(new HttpError("Fetch users failed, try later"));
+  }
+
+  res.json({ users });
 };
 
 // @route   POST api/users/signup
