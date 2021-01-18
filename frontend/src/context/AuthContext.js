@@ -12,15 +12,37 @@ const initialState = {
 const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const login = () => {
-    console.log("login");
+  const login = async (formData) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    // const formatData = { ...formData, name: formData.name || "default" };
+    const { data } = await axios.post("/api/users/login", formData, config);
+    console.log(data);
   };
+
+  const register = async (formData) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const formatData = { ...formData, name: formData.name || "default" };
+
+    const { data } = await axios.post("/api/users/signup", formatData, config);
+    console.log(data);
+  };
+
   const logout = () => {
     console.log("logout");
   };
 
   return (
-    <AuthContext.Provider value={{ ...state, login, logout }}>
+    <AuthContext.Provider value={{ ...state, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

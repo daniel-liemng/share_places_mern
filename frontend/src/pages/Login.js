@@ -3,14 +3,19 @@ import { Card, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 
-import EmailInput from "../components/form/EmailInput";
-import PasswordInput from "../components/form/PasswordInput";
+// import EmailInput from "../components/form/EmailInput";
+// import PasswordInput from "../components/form/PasswordInput";
 import TextFieldInput from "../components/form/TextFieldInput";
 import useYupValidationResolver from "../utils/YupValidationResolver";
+import { useAuthContext } from "../context/AuthContext";
 
 const Login = () => {
+  const { login, register } = useAuthContext();
+
   // Switch between Login and Register
   const [isLoginMode, setIsLoginMode] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Yup validation
   const validationSchema = useMemo(
@@ -30,15 +35,17 @@ const Login = () => {
 
   const { control, handleSubmit, errors } = useForm({ resolver });
 
-  const [submitting, setSubmitting] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
   const switchModeHandle = () => {
     setIsLoginMode((prevMode) => !prevMode);
   };
 
   const onSubmit = (data) => {
     console.log("submit", data);
+    if (isLoginMode) {
+      login(data);
+    } else {
+      register(data);
+    }
   };
 
   console.log("error", errors);
