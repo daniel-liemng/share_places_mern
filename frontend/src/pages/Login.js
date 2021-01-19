@@ -8,7 +8,6 @@ import * as Yup from "yup";
 import TextFieldInput from "../components/form/TextFieldInput";
 import useYupValidationResolver from "../utils/YupValidationResolver";
 import { useAppContext } from "../context/AppContext";
-import ErrorModal from "../components/shared/ErrorModal";
 import Loading from "../components/shared/Loading";
 
 const Login = () => {
@@ -52,9 +51,9 @@ const Login = () => {
 
   console.log("error", errors);
 
-  // if (loading) {
-  //   return <Loading />;
-  // }
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className='new-form'>

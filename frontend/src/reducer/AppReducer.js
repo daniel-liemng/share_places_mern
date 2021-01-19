@@ -12,6 +12,9 @@ import {
   PLACE_CREATE_REQUEST,
   PLACE_CREATE_SUCCESS,
   PLACE_CREATE_FAIL,
+  PLACES_BY_USER_GET_REQUEST,
+  PLACES_BY_USER_GET_SUCCESS,
+  PLACES_BY_USER_GET_FAIL,
 } from "../context/actionTypes";
 
 const authReducer = (state, action) => {
@@ -62,6 +65,17 @@ const authReducer = (state, action) => {
         error: null,
       };
     case PLACE_CREATE_FAIL:
+      return { ...state, loading: false, error: payload };
+    case PLACES_BY_USER_GET_REQUEST:
+      return { ...state, loading: true };
+    case PLACES_BY_USER_GET_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        places: payload,
+        error: null,
+      };
+    case PLACES_BY_USER_GET_FAIL:
       return { ...state, loading: false, error: payload };
     default:
       return state;

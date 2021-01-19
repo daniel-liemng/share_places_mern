@@ -6,7 +6,7 @@ import Logo from "../../assets/star_logo.svg";
 import { useAppContext } from "../../context/AppContext";
 
 const Header = () => {
-  const { isAuthenticated, logout } = useAppContext();
+  const { isAuthenticated, logout, userId } = useAppContext();
 
   return (
     <Navbar bg='primary' expand='md'>
@@ -29,7 +29,7 @@ const Header = () => {
             <Nav.Link>Users</Nav.Link>
           </LinkContainer>
           {isAuthenticated && (
-            <LinkContainer to='/u1/places'>
+            <LinkContainer to={`/${userId}/places`}>
               <Nav.Link>My Places</Nav.Link>
             </LinkContainer>
           )}

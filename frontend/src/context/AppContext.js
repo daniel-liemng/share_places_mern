@@ -16,6 +16,9 @@ import {
   PLACE_CREATE_REQUEST,
   PLACE_CREATE_SUCCESS,
   PLACE_CREATE_FAIL,
+  PLACES_BY_USER_GET_REQUEST,
+  PLACES_BY_USER_GET_SUCCESS,
+  PLACES_BY_USER_GET_FAIL,
 } from "./actionTypes";
 
 const AppContext = createContext();
@@ -149,9 +152,38 @@ const AppProvider = ({ children }) => {
     }
   };
 
+  //// GET PLACES OF CURRENT USER
+  const getPlacesByUser = async (userId) => {
+    dispatch({ type: PLACES_BY_USER_GET_REQUEST });
+    try {
+      const { data } = await axios.get(`/api/places/user/${userId}`);
+
+      console.log("PlacesUserData", data);
+      dispatch({ type: PLACES_BY_USER_GET_SUCCESS, payload: data });
+    } catch (err) {
+      // Error: err.response.data.message
+      console.log("ERR.MSG", err.response);
+      dispatch({
+        type: PLACES_BY_USER_GET_FAIL,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.response,
+      });
+    }
+  };
+
   return (
     <AppContext.Provider
-      value={{ ...state, login, register, logout, getUsers, createPlace }}
+      value={{
+        ...state,
+        login,
+        register,
+        logout,
+        getUsers,
+        createPlace,
+        getPlacesByUser,
+      }}
     >
       {children}
     </AppContext.Provider>

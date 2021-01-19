@@ -61,7 +61,9 @@ const UpdatePlace = () => {
   if (!indentifiedPlace) {
     return (
       <Card style={{ maxWidth: "30rem", margin: "2rem auto" }}>
-        <Card.Body>Could not find place!</Card.Body>
+        <Card.Body>
+          <h5 className='text-danger'> Could not find place!</h5>
+        </Card.Body>
       </Card>
     );
   }

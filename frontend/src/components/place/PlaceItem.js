@@ -6,9 +6,9 @@ import ConfirmDeleteModal from "../shared/ConfirmDeleteModal";
 import { useAppContext } from "../../context/AppContext";
 
 const PlaceItem = ({ place }) => {
-  const { isAuthenticated } = useAppContext();
+  const { isAuthenticated, userId } = useAppContext();
 
-  const { id, title, description, imgUrl, address, location } = place;
+  const { _id, title, description, image, address, location, creator } = place;
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -16,8 +16,8 @@ const PlaceItem = ({ place }) => {
   const handleDeleteModalShow = () => setShowDeleteModal(true);
 
   return (
-    <Card style={{ width: "40rem", margin: "1.5rem auto" }}>
-      <Card.Img variant='top' src={imgUrl} />
+    <Card className='mb-4'>
+      <Card.Img variant='top' src={image} />
       <Card.Body>
         <Card.Title>{title}</Card.Title>
         <Card.Text>{description}</Card.Text>
@@ -26,13 +26,16 @@ const PlaceItem = ({ place }) => {
         </Card.Text>
       </Card.Body>
       {isAuthenticated && (
-        <Card.Footer className='d-flex justify-content-around'>
-          <LinkContainer to={`/places/${id}`}>
-            <Button variant='warning'>Edit</Button>
-          </LinkContainer>
-          <Button variant='danger' onClick={handleDeleteModalShow}>
-            Delete
-          </Button>
+        <Card.Footer className='d-flex flex-column'>
+          {creator === userId && <Button variant='primary'>View on Map</Button>}
+          <div className='d-flex justify-content-around mt-2'>
+            <LinkContainer to={`/places/${_id}`}>
+              <Button variant='warning'>Edit</Button>
+            </LinkContainer>
+            <Button variant='danger' onClick={handleDeleteModalShow}>
+              Delete
+            </Button>
+          </div>
         </Card.Footer>
       )}
 

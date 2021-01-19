@@ -3,7 +3,7 @@ import React from "react";
 import { Media, Image } from "react-bootstrap";
 
 const UserItem = ({ user }) => {
-  const { id, name, image, places } = user;
+  const { _id, name, image, places } = user;
 
   console.log("NAME", name);
 
@@ -12,13 +12,12 @@ const UserItem = ({ user }) => {
       style={{
         margin: "2rem auto",
         backgroundColor: "#ffa69e",
-        maxWidth: "35rem",
         padding: "0.7rem",
       }}
     >
       <Image
-        width={200}
-        height={200}
+        width='150'
+        height='150'
         className='mr-3'
         src={image}
         alt='Generic placeholder'

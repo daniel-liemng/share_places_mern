@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Card, Container } from "react-bootstrap";
+import { Button, Card, Container, Row, Col } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
 import PlaceItem from "./PlaceItem";
@@ -19,9 +19,13 @@ const PlaceList = ({ places }) => {
   }
   return (
     <Container>
-      {places.map((place) => (
-        <PlaceItem key={place.id} place={place} />
-      ))}
+      <Row className='mt-5'>
+        {places.map((place) => (
+          <Col xs={6} md={4} key={place._id}>
+            <PlaceItem place={place} />
+          </Col>
+        ))}
+      </Row>
     </Container>
   );
 };
