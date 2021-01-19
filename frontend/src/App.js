@@ -24,8 +24,8 @@ const App = () => {
       <Switch>
         <Route exact path='/' component={Users} />
         <PrivateRoute exact path='/:userId/places' component={UserPlaces} />
-        <PrivateRoute exact path='/places/:placeId' component={UpdatePlace} />
         <PrivateRoute exact path='/places/new' component={NewPlace} />
+        <PrivateRoute exact path='/places/:placeId' component={UpdatePlace} />
         <AuthRoute exact path='/login' component={Login} />
         <Redirect to='/' />
       </Switch>

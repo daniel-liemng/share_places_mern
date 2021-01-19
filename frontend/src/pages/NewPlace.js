@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { Card, Form, Button, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
+import { LinkContainer } from "react-router-bootstrap";
 
 import TextFieldInput from "../components/form/TextFieldInput";
 import TextAreaInput from "../components/form/TextAreaInput";
@@ -42,7 +43,6 @@ const NewPlace = () => {
   return (
     <div className='new-form'>
       <Card style={{ width: "30rem", marginTop: "4rem" }}>
-        {error && <h3>{error}</h3>}
         <Card.Title className='text-center' style={{ marginTop: "2rem" }}>
           <h2>Add New Place</h2>
         </Card.Title>
@@ -91,19 +91,27 @@ const NewPlace = () => {
               )}
             </Form.Group>
 
-            <Button variant='primary' type='submit' disabled={loading}>
-              {loading ? (
-                <Spinner
-                  as='span'
-                  animation='border'
-                  size='sm'
-                  role='status'
-                  aria-hidden='true'
-                />
-              ) : (
-                "Add Place"
-              )}
-            </Button>
+            <div className='d-flex'>
+              <Button variant='primary' type='submit' disabled={loading}>
+                {loading ? (
+                  <Spinner
+                    as='span'
+                    animation='border'
+                    size='sm'
+                    role='status'
+                    aria-hidden='true'
+                  />
+                ) : (
+                  "Add Place"
+                )}
+              </Button>
+
+              <LinkContainer to='/'>
+                <Button variant='secondary' className='ml-2'>
+                  Cancel
+                </Button>
+              </LinkContainer>
+            </div>
           </Form>
         </Card.Body>
       </Card>

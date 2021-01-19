@@ -3,6 +3,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { Card, Form, Button, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
+import { LinkContainer } from "react-router-bootstrap";
 
 import TextFieldInput from "../components/form/TextFieldInput";
 import TextAreaInput from "../components/form/TextAreaInput";
@@ -41,6 +42,7 @@ const UpdatePlace = () => {
 
   const { control, handleSubmit, errors } = useForm({ resolver });
 
+  // Fetch place data to fill in the fields
   useEffect(() => {
     getPlaceById(placeId);
   }, [placeId]);
@@ -59,6 +61,10 @@ const UpdatePlace = () => {
 
   if (!place) {
     return <MessageCard message=' Could not find place!' />;
+  }
+
+  if (error) {
+    return <MessageCard message={error} />;
   }
 
   return (
@@ -98,20 +104,26 @@ const UpdatePlace = () => {
                 </Form.Text>
               )}
             </Form.Group>
-
-            <Button variant='primary' type='submit' disabled={loading}>
-              {loading ? (
-                <Spinner
-                  as='span'
-                  animation='border'
-                  size='sm'
-                  role='status'
-                  aria-hidden='true'
-                />
-              ) : (
-                "Edit Place"
-              )}
-            </Button>
+            <div className='d-flex'>
+              <Button variant='primary' type='submit' disabled={loading}>
+                {loading ? (
+                  <Spinner
+                    as='span'
+                    animation='border'
+                    size='sm'
+                    role='status'
+                    aria-hidden='true'
+                  />
+                ) : (
+                  "Edit Place"
+                )}
+              </Button>
+              <LinkContainer to={`/${userId}/places`}>
+                <Button variant='secondary' className='ml-2'>
+                  Cancel
+                </Button>
+              </LinkContainer>
+            </div>
           </Form>
         </Card.Body>
       </Card>

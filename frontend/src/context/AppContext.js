@@ -25,6 +25,9 @@ import {
   PLACE_UPDATE_REQUEST,
   PLACE_UPDATE_SUCCESS,
   PLACE_UPDATE_FAIL,
+  PLACE_DELETE_REQUEST,
+  PLACE_DELETE_SUCCESS,
+  PLACE_DELETE_FAIL,
 } from "./actionTypes";
 
 const AppContext = createContext();
@@ -234,6 +237,30 @@ const AppProvider = ({ children }) => {
     }
   };
 
+  //// DELETE PLACE
+  const deletePlace = async (placeId) => {
+    dispatch({ type: PLACE_DELETE_REQUEST });
+    try {
+      const { data } = await axios.delete(`/api/places/${placeId}`);
+
+      console.log("DELETEPlaceData", data);
+      dispatch({ type: PLACE_DELETE_SUCCESS, payload: placeId });
+
+      // Redirect
+      // history.push(`/${userId}/places`);
+    } catch (err) {
+      // Error: err.response.data.message
+      console.log("ERR.MSG", err.response);
+      dispatch({
+        type: PLACE_DELETE_FAIL,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.response,
+      });
+    }
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -246,6 +273,7 @@ const AppProvider = ({ children }) => {
         getPlacesByUser,
         getPlaceById,
         updatePlace,
+        deletePlace,
       }}
     >
       {children}

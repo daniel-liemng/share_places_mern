@@ -9,9 +9,11 @@ const UserItem = ({ user }) => {
     <Media
       style={{
         margin: "2rem auto",
-        backgroundColor: "#ffa69e",
+        backgroundColor: "#a2d2ff",
         padding: "0.7rem",
+        borderRadius: "10px",
       }}
+      className='user-card'
     >
       <Image
         width='150'

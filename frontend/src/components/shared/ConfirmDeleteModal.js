@@ -1,11 +1,27 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
 
-const ConfirmDeleteModal = ({ handleClose }) => {
+import { useAppContext } from "../../context/AppContext";
+import MessageCard from "./MessageCard";
+import Loading from "./Loading";
+
+const ConfirmDeleteModal = ({ handleClose, placeId }) => {
+  const { loading, error, deletePlace } = useAppContext();
+
   const handleDeletePlace = () => {
-    console.log("deleting");
+    // Delete place here in Confirm Modal
+    deletePlace(placeId);
+
     handleClose();
   };
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return <MessageCard message={error} />;
+  }
 
   return (
     <>

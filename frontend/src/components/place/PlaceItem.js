@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Card, ListGroup, ListGroupItem, Modal } from "react-bootstrap";
+import { Button, Card, Modal } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
 import ConfirmDeleteModal from "../shared/ConfirmDeleteModal";
@@ -40,7 +40,10 @@ const PlaceItem = ({ place }) => {
       )}
 
       <Modal show={showDeleteModal} onHide={handleDeleteModalClose} centered>
-        <ConfirmDeleteModal handleClose={handleDeleteModalClose} />
+        <ConfirmDeleteModal
+          handleClose={handleDeleteModalClose}
+          placeId={_id}
+        />
       </Modal>
     </Card>
   );

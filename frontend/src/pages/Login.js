@@ -15,8 +15,6 @@ const Login = () => {
 
   // Switch between Login and Register
   const [isLoginMode, setIsLoginMode] = useState(true);
-  // const [submitting, setSubmitting] = useState(false);
-  // const [isLoading, setIsLoading] = useState(false);
 
   // Yup validation
   const validationSchema = useMemo(

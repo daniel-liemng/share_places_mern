@@ -21,6 +21,9 @@ import {
   PLACE_UPDATE_REQUEST,
   PLACE_UPDATE_SUCCESS,
   PLACE_UPDATE_FAIL,
+  PLACE_DELETE_REQUEST,
+  PLACE_DELETE_SUCCESS,
+  PLACE_DELETE_FAIL,
 } from "../context/actionTypes";
 
 const authReducer = (state, action) => {
@@ -104,6 +107,18 @@ const authReducer = (state, action) => {
         error: null,
       };
     case PLACE_UPDATE_FAIL:
+      return { ...state, loading: false, error: payload };
+    case PLACE_DELETE_REQUEST:
+      return { ...state, loading: true };
+    case PLACE_DELETE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        places: [...state.places].filter((p) => p._id !== payload),
+        place: null,
+        error: null,
+      };
+    case PLACE_DELETE_FAIL:
       return { ...state, loading: false, error: payload };
     default:
       return state;
