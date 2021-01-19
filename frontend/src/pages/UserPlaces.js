@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 
 import PlaceList from "../components/place/PlaceList";
 import Loading from "../components/shared/Loading";
+import MessageCard from "../components/shared/MessageCard";
 import { useAppContext } from "../context/AppContext";
 
 const UserPlaces = () => {
@@ -19,7 +20,7 @@ const UserPlaces = () => {
   }
 
   if (error) {
-    return <h3 className='text-danger'>{error}</h3>;
+    return <MessageCard message={error} />;
   }
 
   return <PlaceList places={places} />;

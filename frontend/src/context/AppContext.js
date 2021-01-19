@@ -19,6 +19,12 @@ import {
   PLACES_BY_USER_GET_REQUEST,
   PLACES_BY_USER_GET_SUCCESS,
   PLACES_BY_USER_GET_FAIL,
+  PLACE_GET_REQUEST,
+  PLACE_GET_SUCCESS,
+  PLACE_GET_FAIL,
+  PLACE_UPDATE_REQUEST,
+  PLACE_UPDATE_SUCCESS,
+  PLACE_UPDATE_FAIL,
 } from "./actionTypes";
 
 const AppContext = createContext();
@@ -173,6 +179,61 @@ const AppProvider = ({ children }) => {
     }
   };
 
+  //// GET PLACE BY PLACE ID
+  const getPlaceById = async (placeId) => {
+    dispatch({ type: PLACE_GET_REQUEST });
+    try {
+      const { data } = await axios.get(`/api/places/${placeId}`);
+
+      console.log("PlacesIdData", data);
+      dispatch({ type: PLACE_GET_SUCCESS, payload: data });
+    } catch (err) {
+      // Error: err.response.data.message
+      console.log("ERR.MSG", err.response);
+      dispatch({
+        type: PLACE_GET_FAIL,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.response,
+      });
+    }
+  };
+
+  //// UPDATE PLACE
+  const updatePlace = async (formData, placeId, userId, history) => {
+    dispatch({ type: PLACE_UPDATE_REQUEST });
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.patch(
+        `/api/places/${placeId}`,
+        formData,
+        config
+      );
+
+      console.log("updatePlaceData", data);
+      dispatch({ type: PLACE_UPDATE_SUCCESS, payload: data });
+
+      // Redirect
+      history.push(`/${userId}/places`);
+    } catch (err) {
+      // Error: err.response.data.message
+      console.log("ERR.MSG", err.response);
+      dispatch({
+        type: PLACE_UPDATE_FAIL,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.response,
+      });
+    }
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -183,6 +244,8 @@ const AppProvider = ({ children }) => {
         getUsers,
         createPlace,
         getPlacesByUser,
+        getPlaceById,
+        updatePlace,
       }}
     >
       {children}

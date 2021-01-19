@@ -51,10 +51,6 @@ const Login = () => {
 
   console.log("error", errors);
 
-  if (loading) {
-    return <Loading />;
-  }
-
   return (
     <div className='new-form'>
       <Card style={{ width: "30rem", marginTop: "4rem" }}>

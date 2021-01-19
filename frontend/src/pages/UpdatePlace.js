@@ -1,75 +1,64 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import { Card, Form, Button } from "react-bootstrap";
+import React, { useMemo, useEffect } from "react";
+import { useParams, useHistory } from "react-router-dom";
+import { Card, Form, Button, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import * as Yup from "yup";
 
 import TextFieldInput from "../components/form/TextFieldInput";
 import TextAreaInput from "../components/form/TextAreaInput";
 import Loading from "../components/shared/Loading";
-
-const placeData = [
-  {
-    id: "p1",
-    title: "Empire State Building 1",
-    description: "One of the tallest building",
-    imgUrl:
-      "https://www.tripsavvy.com/thmb/ReFZGQNAplVtAoqej_A4kt44bxo=/800x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/empire-state-building-at-dusk-new-york-city-usa-668600131-590f0a5b5f9b5864701d53f4.jpg",
-    address: "20 W 34th St, New York, NY 10001, United States",
-    location: {
-      lat: 40.7484405,
-      lng: -73.9878531,
-    },
-    creator: "u1",
-  },
-  {
-    id: "p2",
-    title: "Empire State Building 2",
-    description: "One of the tallest building",
-    imgUrl:
-      "https://www.tripsavvy.com/thmb/ReFZGQNAplVtAoqej_A4kt44bxo=/800x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/empire-state-building-at-dusk-new-york-city-usa-668600131-590f0a5b5f9b5864701d53f4.jpg",
-    address: "20 W 34th St, New York, NY 10001, United States",
-    location: {
-      lat: 40.7484405,
-      lng: -73.9878531,
-    },
-    creator: "u2",
-  },
-];
+import MessageCard from "../components/shared/MessageCard";
+import useYupValidationResolver from "../utils/YupValidationResolver";
+import { useAppContext } from "../context/AppContext";
 
 const UpdatePlace = () => {
+  const validationSchema = useMemo(
+    () =>
+      Yup.object({
+        title: Yup.string().required("Required"),
+        description: Yup.string().min(
+          5,
+          "Description is at least 5 characters long"
+        ),
+      }),
+    []
+  );
+
+  const resolver = useYupValidationResolver(validationSchema);
+
   const { placeId } = useParams();
 
-  const { control, handleSubmit, errors } = useForm();
+  const history = useHistory();
 
-  const [submitting, setSubmitting] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    loading,
+    error,
+    getPlaceById,
+    place,
+    updatePlace,
+    userId,
+  } = useAppContext();
 
-  const indentifiedPlace = placeData.find((p) => p.id === placeId);
+  const { control, handleSubmit, errors } = useForm({ resolver });
+
+  useEffect(() => {
+    getPlaceById(placeId);
+  }, [placeId]);
 
   const onSubmit = (data) => {
-    setSubmitting(true);
-    setIsLoading(true);
-
     console.log("submit", data);
 
-    setSubmitting(false);
-    setIsLoading(false);
+    updatePlace(data, placeId, userId, history);
   };
 
-  console.log(errors);
+  console.log("errors", errors);
 
-  if (!indentifiedPlace) {
-    return (
-      <Card style={{ maxWidth: "30rem", margin: "2rem auto" }}>
-        <Card.Body>
-          <h5 className='text-danger'> Could not find place!</h5>
-        </Card.Body>
-      </Card>
-    );
+  if (loading) {
+    return <Loading />;
   }
 
-  if (isLoading) {
-    return <Loading />;
+  if (!place) {
+    return <MessageCard message=' Could not find place!' />;
   }
 
   return (
@@ -85,7 +74,8 @@ const UpdatePlace = () => {
               <TextFieldInput
                 name='title'
                 control={control}
-                defaultValue={indentifiedPlace.title}
+                defaultValue={place.title}
+                className={errors.title ? "error" : null}
               />
               {errors.title && (
                 <Form.Text className='text-danger'>
@@ -99,7 +89,8 @@ const UpdatePlace = () => {
               <TextAreaInput
                 name='description'
                 control={control}
-                defaultValue={indentifiedPlace.description}
+                defaultValue={place.description}
+                className={errors.description ? "error" : null}
               />
               {errors.description && (
                 <Form.Text className='text-danger'>
@@ -108,26 +99,18 @@ const UpdatePlace = () => {
               )}
             </Form.Group>
 
-            <Form.Group controlId='formBasicAddress'>
-              <Form.Label>Address</Form.Label>
-              <TextFieldInput
-                name='address'
-                control={control}
-                defaultValue={indentifiedPlace.address}
-              />
-              {errors.address && (
-                <Form.Text className='text-danger'>
-                  {errors.address.message}
-                </Form.Text>
+            <Button variant='primary' type='submit' disabled={loading}>
+              {loading ? (
+                <Spinner
+                  as='span'
+                  animation='border'
+                  size='sm'
+                  role='status'
+                  aria-hidden='true'
+                />
+              ) : (
+                "Edit Place"
               )}
-            </Form.Group>
-
-            <Button
-              variant='primary'
-              type='submit'
-              disabled={submitting || isLoading}
-            >
-              Update Place
             </Button>
           </Form>
         </Card.Body>

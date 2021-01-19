@@ -5,8 +5,6 @@ import { Media, Image } from "react-bootstrap";
 const UserItem = ({ user }) => {
   const { _id, name, image, places } = user;
 
-  console.log("NAME", name);
-
   return (
     <Media
       style={{

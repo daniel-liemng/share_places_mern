@@ -13,12 +13,12 @@ const NewPlace = () => {
   const validationSchema = useMemo(
     () =>
       Yup.object({
-        title: Yup.string().required("Required !!!**"),
+        title: Yup.string().required("Required"),
         description: Yup.string().min(
           5,
           "Description is at least 5 characters long"
         ),
-        address: Yup.string().required("Required !!!**"),
+        address: Yup.string().required("Required"),
       }),
     []
   );
