@@ -7,12 +7,12 @@ import * as Yup from "yup";
 // import PasswordInput from "../components/form/PasswordInput";
 import TextFieldInput from "../components/form/TextFieldInput";
 import useYupValidationResolver from "../utils/YupValidationResolver";
-import { useAuthContext } from "../context/AuthContext";
+import { useAppContext } from "../context/AppContext";
 import ErrorModal from "../components/shared/ErrorModal";
 import Loading from "../components/shared/Loading";
 
 const Login = () => {
-  const { login, register, loading } = useAuthContext();
+  const { login, register, loading, error } = useAppContext();
 
   // Switch between Login and Register
   const [isLoginMode, setIsLoginMode] = useState(true);
@@ -63,6 +63,7 @@ const Login = () => {
           <h2>{isLoginMode ? "Login" : "Register"}</h2>
         </Card.Title>
         <Card.Body>
+          {error && <h6 className='p-2 text-danger'>{error}</h6>}
           <Form onSubmit={handleSubmit(onSubmit)}>
             {!isLoginMode && (
               <Form.Group controlId='formBasicName'>

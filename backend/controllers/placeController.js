@@ -31,7 +31,7 @@ const getPlaceByPlaceId = async (req, res, next) => {
   // Convert to normal JS object -> get rid of _id
   // res.json({ place: place.toObject({ getters: true }) });
 
-  res.json({ place });
+  res.json(place);
 };
 
 // @route   GET api/places/user/:userId
@@ -63,7 +63,7 @@ const getPlacesByUserId = async (req, res, next) => {
   //   places: places.map((place) => place.toObject({ getters: true })),
   // });
 
-  res.json({ places });
+  res.json(places);
 };
 
 // @route   POST api/places
@@ -117,7 +117,7 @@ const createPlace = async (req, res, next) => {
     return next(new HttpError("Creating place failed, please try again"));
   }
 
-  res.status(201).json({ place: createdPlace });
+  res.status(201).json(createdPlace);
 };
 
 // @route   PATCH api/places/:placeId
@@ -157,7 +157,7 @@ const updatePlace = async (req, res, next) => {
     return next(new HttpError("Could not update place", 500));
   }
 
-  res.status(200).json({ place });
+  res.status(200).json(place);
 };
 
 // @route   DELETE api/places/:placeId

@@ -3,10 +3,10 @@ import { Button, Card, ListGroup, ListGroupItem, Modal } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
 import ConfirmDeleteModal from "../shared/ConfirmDeleteModal";
-import { useAuthContext } from "../../context/AuthContext";
+import { useAppContext } from "../../context/AppContext";
 
 const PlaceItem = ({ place }) => {
-  const { isAuthenticated } = useAuthContext();
+  const { isAuthenticated } = useAppContext();
 
   const { id, title, description, imgUrl, address, location } = place;
 

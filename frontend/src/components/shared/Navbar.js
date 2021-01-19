@@ -3,10 +3,10 @@ import { Nav, Navbar, Image } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 
 import Logo from "../../assets/star_logo.svg";
-import { useAuthContext } from "../../context/AuthContext";
+import { useAppContext } from "../../context/AppContext";
 
 const Header = () => {
-  const { isAuthenticated, logout } = useAuthContext();
+  const { isAuthenticated, logout } = useAppContext();
 
   return (
     <Navbar bg='primary' expand='md'>

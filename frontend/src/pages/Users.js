@@ -3,27 +3,10 @@ import { Card } from "react-bootstrap";
 
 import UserList from "../components/user/UserList";
 import Loading from "../components/shared/Loading";
-import { useAuthContext } from "../context/AuthContext";
-
-// const userData = [
-//   {
-//     id: "u1",
-//     name: "Max Smith",
-//     image:
-//       "https://i2.wp.com/digital-photography-school.com/wp-content/uploads/2011/07/outdoor-portraits-1.jpg?resize=2000%2C1160&ssl=1",
-//     places: 3,
-//   },
-//   {
-//     id: "u2",
-//     name: "Max Smith",
-//     image:
-//       "https://i2.wp.com/digital-photography-school.com/wp-content/uploads/2011/07/outdoor-portraits-1.jpg?resize=2000%2C1160&ssl=1",
-//     places: 3,
-//   },
-// ];
+import { useAppContext } from "../context/AppContext";
 
 const Users = () => {
-  const { getUsers, loading, users, error } = useAuthContext();
+  const { getUsers, loading, users, error } = useAppContext();
 
   useEffect(() => {
     getUsers();
@@ -33,7 +16,7 @@ const Users = () => {
 
   if (loading) return <Loading />;
 
-  if (error) return <h2 className='text-danger text-center'>{error}</h2>;
+  if (error) return <h4 className='text-danger text-center'>{error}</h4>;
 
   if (users.length === 0)
     return (
@@ -42,7 +25,7 @@ const Users = () => {
       </Card>
     );
 
-  return <UserList users={users.users} />;
+  return <UserList users={users} />;
 };
 
 export default Users;

@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from "react";
+import React, { useMemo } from "react";
+import { useHistory } from "react-router-dom";
 import { Card, Form, Button, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
@@ -6,7 +7,7 @@ import * as Yup from "yup";
 import TextFieldInput from "../components/form/TextFieldInput";
 import TextAreaInput from "../components/form/TextAreaInput";
 import useYupValidationResolver from "../utils/YupValidationResolver";
-import { useAuthContext } from "../context/AuthContext";
+import { useAppContext } from "../context/AppContext";
 
 const NewPlace = () => {
   const validationSchema = useMemo(
@@ -26,10 +27,14 @@ const NewPlace = () => {
 
   const { control, handleSubmit, errors } = useForm({ resolver });
 
-  const { loading, error } = useAuthContext();
+  const { loading, error, createPlace, userId } = useAppContext();
+
+  const history = useHistory();
 
   const onSubmit = (data) => {
     console.log("submit", data);
+
+    createPlace({ ...data, creator: userId }, history);
   };
 
   console.log(errors);
@@ -37,10 +42,12 @@ const NewPlace = () => {
   return (
     <div className='new-form'>
       <Card style={{ width: "30rem", marginTop: "4rem" }}>
+        {error && <h3>{error}</h3>}
         <Card.Title className='text-center' style={{ marginTop: "2rem" }}>
           <h2>Add New Place</h2>
         </Card.Title>
         <Card.Body>
+          {error && <h6 className='p-2 text-danger'>{error}</h6>}
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Form.Group controlId='formBasicTitle'>
               <Form.Label>Title</Form.Label>

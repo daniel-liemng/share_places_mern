@@ -13,7 +13,7 @@ const getAllUsers = async (req, res, next) => {
     return next(new HttpError("Fetch users failed, try later"));
   }
 
-  res.json({ users });
+  res.json(users);
 };
 
 // @route   POST api/users/signup
@@ -51,7 +51,7 @@ const signup = async (req, res, next) => {
     return next(new HttpError("Signup failed, try later", 500));
   }
 
-  res.status(201).json({ user: createdUser });
+  res.status(201).json(createdUser);
 };
 
 // @route   POST api/users/login
@@ -74,7 +74,7 @@ const login = async (req, res, next) => {
     return next(new HttpError("Invalid credentials, could not log in", 401));
   }
 
-  res.json({ message: "Logged In" });
+  res.json(existingUser);
 };
 
 module.exports = { getAllUsers, signup, login };
