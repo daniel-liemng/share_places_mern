@@ -1,11 +1,12 @@
 import React, { useState, useMemo } from "react";
-import { Card, Form, Button } from "react-bootstrap";
+import { Card, Form, Button, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 
 import TextFieldInput from "../components/form/TextFieldInput";
 import TextAreaInput from "../components/form/TextAreaInput";
 import useYupValidationResolver from "../utils/YupValidationResolver";
+import { useAuthContext } from "../context/AuthContext";
 
 const NewPlace = () => {
   const validationSchema = useMemo(
@@ -25,17 +26,10 @@ const NewPlace = () => {
 
   const { control, handleSubmit, errors } = useForm({ resolver });
 
-  const [submitting, setSubmitting] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const { loading, error } = useAuthContext();
 
   const onSubmit = (data) => {
-    setSubmitting(true);
-    setIsLoading(true);
-
     console.log("submit", data);
-
-    setSubmitting(false);
-    setIsLoading(false);
   };
 
   console.log(errors);
@@ -90,12 +84,18 @@ const NewPlace = () => {
               )}
             </Form.Group>
 
-            <Button
-              variant='primary'
-              type='submit'
-              disabled={submitting || isLoading}
-            >
-              Add Place
+            <Button variant='primary' type='submit' disabled={loading}>
+              {loading ? (
+                <Spinner
+                  as='span'
+                  animation='border'
+                  size='sm'
+                  role='status'
+                  aria-hidden='true'
+                />
+              ) : (
+                "Add Place"
+              )}
             </Button>
           </Form>
         </Card.Body>

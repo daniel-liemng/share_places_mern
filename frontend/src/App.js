@@ -15,6 +15,7 @@ import UserPlaces from "./pages/UserPlaces";
 import Login from "./pages/Login";
 
 import AuthRoute from "./utils/AuthRoute";
+import PrivateRoute from "./utils/PrivateRoute";
 
 const App = () => {
   return (
@@ -22,10 +23,10 @@ const App = () => {
       <Navbar />
       <Switch>
         <Route exact path='/' component={Users} />
-        <AuthRoute exact path='/:userId/places' component={UserPlaces} />
-        <AuthRoute exact path='/places/new' component={NewPlace} />
-        <AuthRoute exact path='/places/:placeId' component={UpdatePlace} />
-        <Route exact path='/login' component={Login} />
+        <PrivateRoute exact path='/:userId/places' component={UserPlaces} />
+        <PrivateRoute exact path='/places/new' component={NewPlace} />
+        <PrivateRoute exact path='/places/:placeId' component={UpdatePlace} />
+        <AuthRoute exact path='/login' component={Login} />
         <Redirect to='/' />
       </Switch>
     </Router>

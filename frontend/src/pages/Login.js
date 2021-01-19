@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Card, Form, Button } from "react-bootstrap";
+import { Card, Form, Button, Modal, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 
@@ -8,14 +8,16 @@ import * as Yup from "yup";
 import TextFieldInput from "../components/form/TextFieldInput";
 import useYupValidationResolver from "../utils/YupValidationResolver";
 import { useAuthContext } from "../context/AuthContext";
+import ErrorModal from "../components/shared/ErrorModal";
+import Loading from "../components/shared/Loading";
 
 const Login = () => {
-  const { login, register } = useAuthContext();
+  const { login, register, loading } = useAuthContext();
 
   // Switch between Login and Register
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [submitting, setSubmitting] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
 
   // Yup validation
   const validationSchema = useMemo(
@@ -49,6 +51,10 @@ const Login = () => {
   };
 
   console.log("error", errors);
+
+  // if (loading) {
+  //   return <Loading />;
+  // }
 
   return (
     <div className='new-form'>
@@ -113,12 +119,20 @@ const Login = () => {
               )}
             </Form.Group>
 
-            <Button
-              variant='primary'
-              type='submit'
-              disabled={submitting || isLoading}
-            >
-              {isLoginMode ? "Login" : "Register"}
+            <Button variant='primary' type='submit' disabled={loading}>
+              {loading ? (
+                <Spinner
+                  as='span'
+                  animation='border'
+                  size='sm'
+                  role='status'
+                  aria-hidden='true'
+                />
+              ) : isLoginMode ? (
+                "Login"
+              ) : (
+                "Register"
+              )}
             </Button>
           </Form>
         </Card.Body>

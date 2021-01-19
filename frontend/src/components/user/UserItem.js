@@ -5,6 +5,8 @@ import { Media, Image } from "react-bootstrap";
 const UserItem = ({ user }) => {
   const { id, name, image, places } = user;
 
+  console.log("NAME", name);
+
   return (
     <Media
       style={{
@@ -26,7 +28,8 @@ const UserItem = ({ user }) => {
         <h1>{name}</h1>
         <p>
           <strong>Place: </strong>
-          {places} {places > 1 ? "places" : "place"}
+          {places && places.length}{" "}
+          {places && places.length > 1 ? "places" : "place"}
         </p>
       </Media.Body>
     </Media>
