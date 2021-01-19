@@ -27,15 +27,17 @@ const PlaceItem = ({ place }) => {
       </Card.Body>
       {isAuthenticated && (
         <Card.Footer className='d-flex flex-column'>
-          {creator === userId && <Button variant='primary'>View on Map</Button>}
-          <div className='d-flex justify-content-around mt-2'>
-            <LinkContainer to={`/places/${_id}`}>
-              <Button variant='warning'>Edit</Button>
-            </LinkContainer>
-            <Button variant='danger' onClick={handleDeleteModalShow}>
-              Delete
-            </Button>
-          </div>
+          <Button variant='primary'>View on Map</Button>
+          {creator === userId && (
+            <div className='d-flex justify-content-around mt-2'>
+              <LinkContainer to={`/places/${_id}`}>
+                <Button variant='warning'>Edit</Button>
+              </LinkContainer>
+              <Button variant='danger' onClick={handleDeleteModalShow}>
+                Delete
+              </Button>
+            </div>
+          )}
         </Card.Footer>
       )}
 
