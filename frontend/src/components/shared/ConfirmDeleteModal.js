@@ -12,6 +12,7 @@ const ConfirmDeleteModal = ({ handleClose, placeId }) => {
     // Delete place here in Confirm Modal
     deletePlace(placeId);
 
+    // Clode modal
     handleClose();
   };
 

@@ -28,6 +28,7 @@ import {
   PLACE_DELETE_REQUEST,
   PLACE_DELETE_SUCCESS,
   PLACE_DELETE_FAIL,
+  CLEAR_ERROR,
 } from "./actionTypes";
 
 const AppContext = createContext();
@@ -58,7 +59,6 @@ const AppProvider = ({ children }) => {
 
       const { data } = await axios.post("/api/users/login", formData, config);
 
-      console.log("loginData", data);
       dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
     } catch (err) {
       // Error: err.response.data.message
@@ -83,6 +83,7 @@ const AppProvider = ({ children }) => {
         },
       };
 
+      // If there is no name input -> set it tod default
       const formatData = { ...formData, name: formData.name || "default" };
       const { data } = await axios.post(
         "/api/users/signup",
@@ -90,7 +91,6 @@ const AppProvider = ({ children }) => {
         config
       );
 
-      console.log("signupData", data);
       dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
     } catch (err) {
       // Error: err.response.data.message
@@ -116,7 +116,7 @@ const AppProvider = ({ children }) => {
     dispatch({ type: USERS_GET_REQUEST });
     try {
       const { data } = await axios.get("/api/users");
-      console.log(data);
+
       dispatch({ type: USERS_GET_SUCCESS, payload: data });
     } catch (err) {
       // Error: err.response.data.message
@@ -143,10 +143,9 @@ const AppProvider = ({ children }) => {
 
       const { data } = await axios.post("/api/places", formData, config);
 
-      console.log("addPlaceData", data);
       dispatch({ type: PLACE_CREATE_SUCCESS, payload: data });
 
-      // Redirect
+      // Redirect to Home
       history.push("/");
     } catch (err) {
       // Error: err.response.data.message
@@ -167,7 +166,6 @@ const AppProvider = ({ children }) => {
     try {
       const { data } = await axios.get(`/api/places/user/${userId}`);
 
-      console.log("PlacesUserData", data);
       dispatch({ type: PLACES_BY_USER_GET_SUCCESS, payload: data });
     } catch (err) {
       // Error: err.response.data.message
@@ -188,7 +186,6 @@ const AppProvider = ({ children }) => {
     try {
       const { data } = await axios.get(`/api/places/${placeId}`);
 
-      console.log("PlacesIdData", data);
       dispatch({ type: PLACE_GET_SUCCESS, payload: data });
     } catch (err) {
       // Error: err.response.data.message
@@ -219,10 +216,9 @@ const AppProvider = ({ children }) => {
         config
       );
 
-      console.log("updatePlaceData", data);
       dispatch({ type: PLACE_UPDATE_SUCCESS, payload: data });
 
-      // Redirect
+      // Redirect to User Places
       history.push(`/${userId}/places`);
     } catch (err) {
       // Error: err.response.data.message
@@ -241,13 +237,9 @@ const AppProvider = ({ children }) => {
   const deletePlace = async (placeId) => {
     dispatch({ type: PLACE_DELETE_REQUEST });
     try {
-      const { data } = await axios.delete(`/api/places/${placeId}`);
+      await axios.delete(`/api/places/${placeId}`);
 
-      console.log("DELETEPlaceData", data);
       dispatch({ type: PLACE_DELETE_SUCCESS, payload: placeId });
-
-      // Redirect
-      // history.push(`/${userId}/places`);
     } catch (err) {
       // Error: err.response.data.message
       console.log("ERR.MSG", err.response);
@@ -259,6 +251,11 @@ const AppProvider = ({ children }) => {
             : err.response,
       });
     }
+  };
+
+  //// CLEAR ERROR
+  const clearError = () => {
+    dispatch({ type: CLEAR_ERROR });
   };
 
   return (
@@ -274,6 +271,7 @@ const AppProvider = ({ children }) => {
         getPlaceById,
         updatePlace,
         deletePlace,
+        clearError,
       }}
     >
       {children}

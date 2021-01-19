@@ -13,9 +13,6 @@ const UserList = ({ users }) => {
           </Col>
         ))}
       </Row>
-      {users.map((user) => (
-        <UserItem key={user._id} user={user} />
-      ))}
     </Container>
   );
 };

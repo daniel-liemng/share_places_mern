@@ -48,12 +48,8 @@ const UpdatePlace = () => {
   }, [placeId]);
 
   const onSubmit = (data) => {
-    console.log("submit", data);
-
     updatePlace(data, placeId, userId, history);
   };
-
-  console.log("errors", errors);
 
   if (loading) {
     return <Loading />;

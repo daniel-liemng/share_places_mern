@@ -24,6 +24,7 @@ import {
   PLACE_DELETE_REQUEST,
   PLACE_DELETE_SUCCESS,
   PLACE_DELETE_FAIL,
+  CLEAR_ERROR,
 } from "../context/actionTypes";
 
 const authReducer = (state, action) => {
@@ -120,6 +121,8 @@ const authReducer = (state, action) => {
       };
     case PLACE_DELETE_FAIL:
       return { ...state, loading: false, error: payload };
+    case CLEAR_ERROR:
+      return { ...state, error: null };
     default:
       return state;
   }

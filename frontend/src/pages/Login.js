@@ -39,15 +39,12 @@ const Login = () => {
   };
 
   const onSubmit = (data) => {
-    console.log("submit", data);
     if (isLoginMode) {
       login(data);
     } else {
       register(data);
     }
   };
-
-  console.log("error", errors);
 
   return (
     <div className='new-form'>
@@ -60,7 +57,7 @@ const Login = () => {
           <Form onSubmit={handleSubmit(onSubmit)}>
             {!isLoginMode && (
               <Form.Group controlId='formBasicName'>
-                <Form.Label>Name</Form.Label>
+                <Form.Label>Name (Optional)</Form.Label>
                 <TextFieldInput
                   name='name'
                   control={control}

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Card, Form, Button, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
@@ -28,17 +28,17 @@ const NewPlace = () => {
 
   const { control, handleSubmit, errors } = useForm({ resolver });
 
-  const { loading, error, createPlace, userId } = useAppContext();
+  const { loading, error, createPlace, userId, clearError } = useAppContext();
 
   const history = useHistory();
 
-  const onSubmit = (data) => {
-    console.log("submit", data);
+  useEffect(() => {
+    clearError();
+  }, []);
 
+  const onSubmit = (data) => {
     createPlace({ ...data, creator: userId }, history);
   };
-
-  console.log(errors);
 
   return (
     <div className='new-form'>
